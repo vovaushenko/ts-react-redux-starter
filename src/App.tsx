@@ -1,26 +1,37 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+/*  Themes */
+import { ThemeProvider } from 'styled-components';
+import { GlobalStyles } from './GlobalStyles';
+import { darkTheme, lightTheme } from './themes';
+/* Router */
+import { BrowserRouter, Route } from 'react-router-dom';
+import Navbar from './components/Navbar';
+import { useTypedSelector } from './hooks/useTypedSelector';
+import Users from './pages/Users';
+import Main from './pages/Main';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+	const { theme } = useTypedSelector((state) => state.theme);
+
+	return (
+		<ThemeProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
+			<GlobalStyles />
+			<BrowserRouter>
+				<Navbar />
+				<Route exact path="/">
+					<Main />
+				</Route>
+				<Route exact path="/users">
+					<Users />
+				</Route>
+				<Route exact path="/users/:id">
+					<div>
+						<h1>Single User Page</h1>
+					</div>
+				</Route>
+			</BrowserRouter>
+		</ThemeProvider>
+	);
+};
 
 export default App;
